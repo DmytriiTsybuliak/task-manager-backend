@@ -1,7 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2020", // или выше
-    "module": "ESNext", // или "CommonJS", зависит от подхода
+    "module": "CommonJS", // или "CommonJS", зависит от подхода
     "moduleResolution": "node",
     "esModuleInterop": true, // Обязательно для корректного импорта express
     "allowSyntheticDefaultImports": true,

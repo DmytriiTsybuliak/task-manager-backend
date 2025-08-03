@@ -1,6 +1,7 @@
 import express from 'express';
 import { env } from './utils/env';
 import { pinoHttp } from 'pino-http';
+import router from './routers';
 
 const PORT = Number(env('PORT', '6000'));
 export const setupServer = () => {
