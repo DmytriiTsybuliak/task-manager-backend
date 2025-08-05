@@ -3,7 +3,7 @@ import dotenv from 'dotenv';
 dotenv.config();
 
 interface EnvFunction {
-  (name: string, defaultValue: string): string;
+  (name: string, defaultValue?: string): string;
 }
 
 export const env: EnvFunction = function (name, defaultValue) {
