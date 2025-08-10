@@ -9,7 +9,9 @@ export const validateBody =
     if (!result.success) {
       return res.status(400).json({
         message: 'Validation error',
-        errors: result.error.message,
+        errors: result.error.issues.map(issue => ({
+          issue: issue.message,
+        })),
       });
     }
 
