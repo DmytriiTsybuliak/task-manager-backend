@@ -1,6 +1,6 @@
 import z from 'zod';
 
-const TaskSchema = z
+export const TaskSchema = z
   .object({
     title: z.string().min(1, 'Title is required'),
     description: z.string().optional(),
@@ -20,6 +20,7 @@ const TaskSchema = z
   })
   .strict();
 
-export type Task = z.infer<typeof TaskSchema>;
+export const UpdateTaskSchema = TaskSchema.partial();
 
-export default TaskSchema;
+export type AddTask = z.infer<typeof TaskSchema>;
+export type UpdateTask = z.infer<typeof UpdateTaskSchema>;

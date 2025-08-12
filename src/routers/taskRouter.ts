@@ -1,13 +1,12 @@
 import { Router } from 'express';
 import controllerWrapper from '../utils/controllerWr';
-import { addTaskCtrl } from '../contollers/taskController';
+import { addTaskCtrl, UpdateTaskCtrl } from '../contollers/taskController';
 import { validateBody } from '../middlewares/validate';
-import TaskSchema from '../validation/task';
+import { TaskSchema, UpdateTaskSchema } from '../validation/task';
 
 const taskRouter = Router();
 
-// taskRouter.get('/');
 taskRouter.post('/', validateBody(TaskSchema), controllerWrapper(addTaskCtrl));
-// taskRouter.delete();
+taskRouter.put('/:id', validateBody(UpdateTaskSchema), controllerWrapper(UpdateTaskCtrl));
 
 export default taskRouter;
