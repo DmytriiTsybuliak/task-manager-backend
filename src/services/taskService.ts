@@ -16,7 +16,7 @@ export const addTask = async (data: AddTask) => {
   });
 };
 
-export const updateTask = async (id: string, data: UpdateTask) => {
+export const updateTaskById = async (id: string, data: UpdateTask) => {
   const { title, description, dueDate, priority, isCompleted, tags, subtasks } = data;
 
   return await TaskDB.findByIdAndUpdate(
@@ -32,4 +32,16 @@ export const updateTask = async (id: string, data: UpdateTask) => {
     },
     { new: true, runValidators: true }
   );
+};
+
+export const getTaskById = async (id: string) => {
+  return await TaskDB.findOne({ _id: id });
+};
+
+export const getAllTasks = async () => {
+  return await TaskDB.find({});
+};
+
+export const deleteTaskById = async (id: string) => {
+  return await TaskDB.findByIdAndDelete(id);
 };
