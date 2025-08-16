@@ -1,6 +1,7 @@
 import express from 'express';
 import { env } from './utils/env';
 import { pinoHttp } from 'pino-http';
+import cors from 'cors';
 import router from './routers';
 import { errorHandler } from './middlewares/errorHandler';
 
@@ -8,6 +9,12 @@ const PORT = Number(env('PORT', '6000'));
 export const setupServer = () => {
   const app = express();
   app.use(express.json());
+  const corsOptions = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+  };
+  app.use(cors(corsOptions));
+
   app.use('/', router);
 
   app.use(
