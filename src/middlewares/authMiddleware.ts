@@ -7,7 +7,7 @@ interface AuthRequest extends Request {
 }
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
-  console.log('Token from cookies:', token);
+  // console.log('Token from cookies:', token);
 
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
@@ -15,11 +15,8 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
   try {
     const decodedUser = jwt.verify(token, env('JWT_SECRET'));
-    console.log('Decoded token:', decodedUser);
-
+    // console.log('Decoded token:', decodedUser);
     req.user = decodedUser; // Assuming the decoded token contains user information
-    console.log('User set in request:', req.user);
-
     next();
   } catch {
     return res.status(401).json({ message: 'Invalid token' });

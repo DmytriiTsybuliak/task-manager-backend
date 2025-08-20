@@ -15,6 +15,16 @@ export const setupServer = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+  app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', req.headers.origin);
+    res.header('Access-Control-Allow-Credentials', 'true');
+    res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
+    res.header(
+      'Access-Control-Allow-Headers',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
+    );
+    next();
+  });
   app.use(cookieParser());
 
   app.use('/', router);
