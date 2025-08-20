@@ -2,16 +2,7 @@ import { Request, Response } from 'express';
 import { loginUser, signupUser } from '../services/authService';
 import { Controller } from '../utils/controllerWr';
 import { createToken } from '../utils/jwt';
-
-const setupCookies = (res: Response, token: string) => {
-  res.cookie('token', token, {
-    httpOnly: true,
-    sameSite: 'none',
-    path: '/',
-    secure: true,
-    maxAge: 7 * 24 * 60 * 60 * 1000,
-  });
-};
+import { setupCookies } from '../utils/cookies';
 
 export const loginCtrl: Controller = async (req, res) => {
   const { user } = await loginUser(req.body);
@@ -35,7 +26,7 @@ export const signupCtrl: Controller = async (req, res) => {
   });
 };
 
-export const logout = async (_req: Request, res: Response) => {
+export const logoutCtrl = async (_req: Request, res: Response) => {
   res.clearCookie('token');
   res.json({ message: 'Logged out' });
   res.status(204).send();

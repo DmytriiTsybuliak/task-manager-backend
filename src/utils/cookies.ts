@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 export const setupCookies = (res: Response, token: string) => {
-  res.cookie('jwt', token, {
+  res.cookie('token', token, {
     httpOnly: true,
     secure: true,
     sameSite: 'none',

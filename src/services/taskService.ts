@@ -1,4 +1,5 @@
 import { TaskDB } from '../db/models/taskSchema';
+import { UserDB } from '../db/models/userSchema';
 import { AddTask, UpdateTask } from '../validation/task';
 
 export const addTask = async (data: AddTask) => {
@@ -34,12 +35,16 @@ export const updateTaskById = async (id: string, data: UpdateTask) => {
   );
 };
 
-export const getTaskById = async (id: string) => {
-  return await TaskDB.findOne({ _id: id });
+export const getTaskById = async (userId: string, id: string) => {
+  const user = await UserDB.findById(userId);
+  if (!user) {
+    throw new Error('User not found');
+  }
+  return await TaskDB.find({ _id: id, userId });
 };
 
-export const getAllTasks = async () => {
-  return await TaskDB.find({});
+export const getAllTasks = async (userId: string) => {
+  return await TaskDB.find({ userId });
 };
 
 export const deleteTaskById = async (id: string) => {

@@ -4,6 +4,7 @@ import { pinoHttp } from 'pino-http';
 import cors from 'cors';
 import router from './routers';
 import { errorHandler } from './middlewares/errorHandler';
+import cookieParser from 'cookie-parser';
 
 const PORT = Number(env('PORT', '6000'));
 export const setupServer = () => {
@@ -14,6 +15,7 @@ export const setupServer = () => {
     credentials: true,
   };
   app.use(cors(corsOptions));
+  app.use(cookieParser());
 
   app.use('/', router);
 
