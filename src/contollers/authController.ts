@@ -28,6 +28,8 @@ export const signupCtrl: Controller = async (req, res) => {
 
 export const logoutCtrl = async (_req: Request, res: Response) => {
   res.clearCookie('token');
-  res.json({ message: 'Logged out' });
-  res.status(204).send();
+  res.status(204).json({
+    status: 204,
+    message: 'Logged out',
+  });
 };

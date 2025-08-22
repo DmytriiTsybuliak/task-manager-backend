@@ -6,7 +6,13 @@ import {
   updateTaskById,
 } from '../services/taskService';
 import { Controller } from '../utils/controllerWr';
-import { Request } from 'express';
+import { Request, Response } from 'express';
+
+interface AuthRequest extends Request {
+  user?: {
+    userId?: string; // Assuming user ID is stored in req.user
+  };
+}
 
 export const addTaskCtrl: Controller = async (req, res) => {
   const data = req.body;
@@ -29,14 +35,7 @@ export const updateTaskCtrl: Controller = async (req, res) => {
   });
 };
 
-interface AuthRequest extends Request {
-  user?: {
-    userId: string; // Assuming user ID is stored in req.user
-  };
-}
-
-export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
-  const { id } = req.params;
+const verifyUser = (req: AuthRequest, res: Response): string | undefined => {
   const userId = req.user?.userId; // Assuming user is set by authMiddleware
 
   if (!userId) {
@@ -44,9 +43,17 @@ export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
       status: 401,
       message: 'Unauthorized: User ID not found',
     });
+    return undefined;
+  }
+  return userId;
+};
+
+export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
+  const { id } = req.params;
+  const userId = verifyUser(req, res);
+  if (!userId) {
     return;
   }
-
   const task = await getTaskById(userId, id);
   if (!task) {
     res.status(404).json({
@@ -63,12 +70,8 @@ export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
 };
 
 export const getAllTasksCtrl: Controller = async (req: AuthRequest, res) => {
-  const userId = req.user?.userId; // Assuming user is set by authMiddleware
+  const userId = verifyUser(req, res);
   if (!userId) {
-    res.status(401).json({
-      status: 401,
-      message: 'Unauthorized: User ID not found',
-    });
     return;
   }
 

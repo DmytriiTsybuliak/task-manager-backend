@@ -3,10 +3,11 @@ import { Request, Response, NextFunction } from 'express';
 import { env } from '../utils/env';
 
 interface AuthRequest extends Request {
-  user?: unknown; // Define the user type as needed
+  user?: unknown;
 }
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
+  // const token2 = req.headers?.cookie?.split('token=')[1];
   // console.log('Token from cookies:', token);
 
   if (!token) {
@@ -15,8 +16,7 @@ export const authMiddleware = (req: AuthRequest, res: Response, next: NextFuncti
 
   try {
     const decodedUser = jwt.verify(token, env('JWT_SECRET'));
-    // console.log('Decoded token:', decodedUser);
-    req.user = decodedUser; // Assuming the decoded token contains user information
+    req.user = decodedUser;
     next();
   } catch {
     return res.status(401).json({ message: 'Invalid token' });

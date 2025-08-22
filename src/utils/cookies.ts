@@ -5,6 +5,6 @@ export const setupCookies = (res: Response, token: string) => {
     httpOnly: true,
     secure: true,
     sameSite: 'none',
-    maxAge: 7 * 24 * 60 * 60 * 1000,
+    maxAge: 1 * 30 * 60 * 1000,
   });
 };
