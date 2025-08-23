@@ -47,20 +47,6 @@ export const updateTaskById = async (userId: string, id: string, data: UpdateTas
     },
     { new: true, runValidators: true }
   );
-  // return await TaskDB.findByIdAndUpdate(
-  //   id,
-  //   {
-  //     title,
-  //     description,
-  //     dueDate,
-  //     priority,
-  //     isCompleted,
-  //     tags,
-  //     subtasks,
-  //     userId,
-  //   },
-  //   { new: true, runValidators: true }
-  // );
 };
 
 export const getTaskById = async (userId: string, id: string) => {
