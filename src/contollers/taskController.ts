@@ -14,27 +14,6 @@ interface AuthRequest extends Request {
   };
 }
 
-export const addTaskCtrl: Controller = async (req, res) => {
-  const data = req.body;
-  const tasks = await addTask(data);
-  res.status(201).json({
-    status: 201,
-    message: 'Successfully added task',
-    data: tasks,
-  });
-};
-
-export const updateTaskCtrl: Controller = async (req, res) => {
-  const { id } = req.params;
-  const data = req.body;
-  const updatedTask = await updateTaskById(id, data);
-  res.status(200).json({
-    status: 200,
-    message: 'Successfully updated task',
-    data: updatedTask,
-  });
-};
-
 const verifyUser = (req: AuthRequest, res: Response): string | undefined => {
   const userId = req.user?.userId; // Assuming user is set by authMiddleware
 
@@ -48,12 +27,57 @@ const verifyUser = (req: AuthRequest, res: Response): string | undefined => {
   return userId;
 };
 
-export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
-  const { id } = req.params;
+export const addTaskCtrl: Controller = async (req, res) => {
   const userId = verifyUser(req, res);
   if (!userId) {
     return;
   }
+  const data = req.body;
+  const tasks = await addTask(userId, data);
+  if (!tasks) {
+    res.status(404).json({
+      status: 404,
+      message: 'User not found',
+    });
+    return;
+  }
+
+  res.status(201).json({
+    status: 201,
+    message: 'Successfully added task',
+    data: tasks,
+  });
+};
+
+export const updateTaskCtrl: Controller = async (req, res) => {
+  const userId = verifyUser(req, res);
+  if (!userId) {
+    return;
+  }
+  const { id } = req.params;
+  const data = req.body;
+  const updatedTask = await updateTaskById(userId, id, data);
+  if (!updatedTask) {
+    res.status(404).json({
+      status: 404,
+      message: 'User or Task not found',
+    });
+    return;
+  }
+  res.status(200).json({
+    status: 200,
+    message: 'Successfully updated task',
+    data: updatedTask,
+  });
+};
+
+export const getTaskCtrl: Controller = async (req, res) => {
+  const userId = verifyUser(req, res);
+  if (!userId) {
+    return;
+  }
+
+  const { id } = req.params;
   const task = await getTaskById(userId, id);
   if (!task) {
     res.status(404).json({
@@ -69,7 +93,7 @@ export const getTaskCtrl: Controller = async (req: AuthRequest, res) => {
   });
 };
 
-export const getAllTasksCtrl: Controller = async (req: AuthRequest, res) => {
+export const getAllTasksCtrl: Controller = async (req, res) => {
   const userId = verifyUser(req, res);
   if (!userId) {
     return;
@@ -79,7 +103,7 @@ export const getAllTasksCtrl: Controller = async (req: AuthRequest, res) => {
   if (!tasks) {
     res.status(404).json({
       status: 404,
-      message: 'Task not found',
+      message: 'Tasks not found',
     });
     return;
   }
@@ -92,8 +116,12 @@ export const getAllTasksCtrl: Controller = async (req: AuthRequest, res) => {
 };
 
 export const deleteTaskCtrl: Controller = async (req, res) => {
+  const userId = verifyUser(req, res);
+  if (!userId) {
+    return;
+  }
   const { id } = req.params;
-  const deletedTask = await deleteTaskById(id);
+  const deletedTask = await deleteTaskById(userId, id);
   if (!deletedTask) {
     res.status(404).json({
       status: 404,
