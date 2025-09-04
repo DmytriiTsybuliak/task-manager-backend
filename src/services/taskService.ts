@@ -66,7 +66,8 @@ export const getAllTasks = async (userId: string) => {
   if (!user) {
     throw new Error('User not found');
   }
-  return await TaskDB.find({ userId });
+  const tasks = await TaskDB.find({ userId }).select('-createdAt -updatedAt, -userId');
+  return tasks;
 };
 
 export const deleteTaskById = async (userId: string, id: string) => {
