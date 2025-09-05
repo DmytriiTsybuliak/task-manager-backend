@@ -10,7 +10,7 @@ export const addTask = async (userId: string, data: AddTask) => {
 
   const { title, description, dueDate, priority, isCompleted, tags, subtasks } = data;
 
-  return await TaskDB.create({
+  const createdTask = await TaskDB.create({
     title,
     description,
     dueDate,
@@ -20,6 +20,8 @@ export const addTask = async (userId: string, data: AddTask) => {
     subtasks,
     userId,
   });
+  const task = await TaskDB.findById(createdTask._id).select('-createdAt -updatedAt -userId');
+  return task;
 };
 
 export const updateTaskById = async (userId: string, id: string, data: UpdateTask) => {
@@ -46,7 +48,7 @@ export const updateTaskById = async (userId: string, id: string, data: UpdateTas
       userId,
     },
     { new: true, runValidators: true }
-  );
+  ).select('-createdAt -updatedAt -userId');
 };
 
 export const getTaskById = async (userId: string, id: string) => {
@@ -54,7 +56,7 @@ export const getTaskById = async (userId: string, id: string) => {
   if (!user) {
     throw new Error('User not found');
   }
-  const task = await TaskDB.findOne({ _id: id, userId });
+  const task = await TaskDB.findOne({ _id: id, userId }).select('-createdAt -updatedAt -userId');
   if (!task) {
     return;
   }
@@ -66,7 +68,7 @@ export const getAllTasks = async (userId: string) => {
   if (!user) {
     throw new Error('User not found');
   }
-  const tasks = await TaskDB.find({ userId }).select('-createdAt -updatedAt, -userId');
+  const tasks = await TaskDB.find({ userId }).select('-createdAt -updatedAt -userId');
   return tasks;
 };
 
