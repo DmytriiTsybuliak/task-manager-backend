@@ -48,7 +48,7 @@ export const updateTaskById = async (userId: string, id: string, data: UpdateTas
       userId,
     },
     { new: true, runValidators: true }
-  ).select('-createdAt -updatedAt -userId -id');
+  ).select('-createdAt -updatedAt -userId');
 };
 
 export const getTaskById = async (userId: string, id: string) => {
