@@ -1,3 +1,4 @@
+import { FilterQuery } from 'mongoose';
 import { TaskDB } from '../db/models/taskSchema';
 import { UserDB } from '../db/models/userSchema';
 import { AddTask, UpdateTask } from '../validation/task';
@@ -79,3 +80,47 @@ export const deleteTaskById = async (userId: string, id: string) => {
   }
   return await TaskDB.findByIdAndDelete({ _id: id, userId });
 };
+
+export interface ITask {
+  userId: string;
+  title: string;
+  description?: string;
+  priority?: 'low' | 'medium' | 'high';
+  tags?: string[];
+  isCompleted: boolean;
+}
+
+export const getFilteredTasks = async (userId: string, search?: string): Promise<ITask[]> => {
+  const query: FilterQuery<ITask> = { userId };
+
+  if (search) {
+    query.$or = [
+      { title: { $regex: search, $options: 'i' } },
+      { description: { $regex: search, $options: 'i' } },
+      { tags: { $in: [new RegExp(search, 'i')] } },
+      { priority: { $regex: search, $options: 'i' } },
+    ];
+  }
+
+  return TaskDB.find(query);
+};
+
+// export const getFilteredTasks = (userId: string, filters: FilterOptions) => {
+//   const query: FilterQuery<typeof TaskDB> = { userId };
+//   if (filters.search) {
+//     query.$or = [
+//       { title: { $regex: filters.search, $options: 'i' } },
+//       { description: { $regex: filters.search, $options: 'i' } },
+//     ];
+//   }
+
+// if (filters.priority) {
+//   query.priority = filters.priority;
+// }
+
+// if (filters.tag) {
+//   query.tags = filters.tag;
+// }
+
+//   return TaskDB.find(query);
+// };
