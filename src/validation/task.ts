@@ -16,7 +16,7 @@ export const TaskSchema = z
         })
       )
       .optional(),
-    userId: z.uuid('Invalid user ID format').optional(),
+    userId: z.string().length(24, 'Invalid ObjectId format').optional(),
   })
   .strict();
 
