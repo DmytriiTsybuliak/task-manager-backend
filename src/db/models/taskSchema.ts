@@ -29,6 +29,17 @@ const TaskSchema = new Schema(
   },
   {
     timestamps: true,
+    toJSON: {
+      transform(doc, ret) {
+        if ('createdAt' in ret) {
+          delete ret.createdAt;
+        }
+        if ('updatedAt' in ret) {
+          delete ret.updatedAt;
+        }
+        return ret;
+      },
+    },
     versionKey: false,
   }
 );
