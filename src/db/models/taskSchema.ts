@@ -41,7 +41,7 @@ const TaskSchema = new Schema(
       },
     },
     versionKey: false,
-  }
+  },
 );
 
 export const TaskDB = model('Task', TaskSchema);

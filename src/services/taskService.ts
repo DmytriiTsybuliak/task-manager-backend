@@ -48,7 +48,7 @@ export const updateTaskById = async (userId: string, id: string, data: UpdateTas
       subtasks,
       userId,
     },
-    { new: true, runValidators: true }
+    { new: true, runValidators: true },
   ).select('-createdAt -updatedAt -userId');
 };
 
@@ -104,23 +104,3 @@ export const getFilteredTasks = async (userId: string, search?: string): Promise
 
   return TaskDB.find(query);
 };
-
-// export const getFilteredTasks = (userId: string, filters: FilterOptions) => {
-//   const query: FilterQuery<typeof TaskDB> = { userId };
-//   if (filters.search) {
-//     query.$or = [
-//       { title: { $regex: filters.search, $options: 'i' } },
-//       { description: { $regex: filters.search, $options: 'i' } },
-//     ];
-//   }
-
-// if (filters.priority) {
-//   query.priority = filters.priority;
-// }
-
-// if (filters.tag) {
-//   query.tags = filters.tag;
-// }
-
-//   return TaskDB.find(query);
-// };

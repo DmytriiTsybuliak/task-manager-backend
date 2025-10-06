@@ -13,7 +13,7 @@ export const TaskSchema = z
         z.object({
           title: z.string().min(1, 'Subtask title is required'),
           status: z.enum(['todo', 'done']).default('todo'),
-        })
+        }),
       )
       .optional(),
     userId: z.string().length(24, 'Invalid ObjectId format').optional(),

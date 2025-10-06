@@ -99,16 +99,8 @@ export const getAllTasksCtrl: Controller = async (req, res) => {
     return;
   }
 
-  // const { search, priority, tag } = req.query as {
-  //   search?: string;
-  //   priority?: string;
-  //   tag?: string;
-  // };
-
   const search = req.query.search as string | undefined;
   const tasks = await getFilteredTasks(userId, search);
-
-  // const tasks = await getFilteredTasks(userId, { search, priority, tag });
 
   if (!tasks || tasks.length === 0) {
     res.status(404).json({

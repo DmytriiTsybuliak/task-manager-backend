@@ -7,9 +7,6 @@ interface AuthRequest extends Request {
 }
 export const authMiddleware = (req: AuthRequest, res: Response, next: NextFunction) => {
   const token = req.cookies?.token;
-  // const token2 = req.headers?.cookie?.split('token=')[1];
-  // console.log('Token from cookies:', token);
-
   if (!token) {
     return res.status(401).json({ message: 'Unauthorized' });
   }

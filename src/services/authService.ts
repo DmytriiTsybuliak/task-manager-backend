@@ -4,9 +4,7 @@ import { UserDB } from '../db/models/userSchema';
 export const signupUser = async (data: { name: string; email: string; password: string }) => {
   const { name, email, password } = data;
   try {
-    // const hashedPassword = await bcrypt.hash(password, 10);
     const user = await UserDB.create({ name, email, password });
-
     return { user };
   } catch {
     throw createHttpError(409, 'User with this email already exists');

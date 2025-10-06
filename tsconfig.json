@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "CommonJS", // или "CommonJS", зависит от подхода
+    "module": "CommonJS",
     "moduleResolution": "node",
-    "esModuleInterop": true, // Обязательно для корректного импорта express
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true
   }
