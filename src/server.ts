@@ -6,22 +6,24 @@ import router from './routers';
 import { errorHandler } from './middlewares/errorHandler';
 import cookieParser from 'cookie-parser';
 
-const PORT = Number(env('PORT', '6000'));
+const PORT = Number(env('PORT', '8080'));
 export const setupServer = () => {
   const app = express();
+
+  app.use(
+    cors({
+      origin: 'http://localhost:3000',
+      credentials: true,
+    })
+  );
   app.use(express.json());
-  const corsOptions = {
-    origin: ['http://localhost:3000'],
-    credentials: true,
-  };
-  app.use(cors(corsOptions));
   app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', req.headers.origin);
     res.header('Access-Control-Allow-Credentials', 'true');
     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.header(
       'Access-Control-Allow-Headers',
-      'Origin, X-Requested-With, Content-Type, Accept, Authorization',
+      'Origin, X-Requested-With, Content-Type, Accept, Authorization'
     );
     next();
   });
@@ -34,7 +36,7 @@ export const setupServer = () => {
       transport: {
         target: 'pino-pretty',
       },
-    }),
+    })
   );
 
   app.get('/', (req, res) => {
